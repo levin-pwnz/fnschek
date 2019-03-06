@@ -2,8 +2,8 @@
 
 namespace LevinPwnz\FnsCheck\Services;
 
-use phpDocumentor\Reflection\Types\Self_;
 use Zxing\QrReader;
+use FnsCheck\FnsCheckHelper;
 
 /**
  * Class QrService
@@ -60,29 +60,7 @@ class QrService
     {
         $recognizedText = $this->getRecognized();
 
-        if (!is_string($recognizedText)) {
-            return self::CHECK_NOT_RECOGNIZED;
-        }
-
-        $tmp = explode('&', $recognizedText);
-
-        $checkData = [
-            'fiscalNumber' => '', // "ФН" в чеке
-            'fiscalSign' => '', // "ФП" в чеке
-            'fiscalDocument' => '', // "ФД" в чеке
-        ];
-
-        foreach ($tmp as $item) {
-
-            $tmpIntem = explode('=', $item);
-
-            if ($tmpIntem[0] == 'fn') $checkData['fiscalNumber'] = $tmpIntem[1];
-            if ($tmpIntem[0] == 'fp') $checkData['fiscalSign'] = $tmpIntem[1];
-            if ($tmpIntem[0] == 'i') $checkData['fiscalDocument'] = $tmpIntem[1];
-
-        }
-
-        return $checkData;
+        return FnsCheckHelper::fromQRCode($recognizedText);
     }
 
 
