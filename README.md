@@ -22,7 +22,7 @@ class HomeController
     public function index(Fns $fns)
     {
         //Retrive all check items by check photo
-        $data = $fns->getAllCheItems($checkFile);
+        $data = $fns->getAllCheckItems($checkFile);
         
         //Retrive info about a check
         $checkInformation = $fns->getInfoByCheck($checkFile);
