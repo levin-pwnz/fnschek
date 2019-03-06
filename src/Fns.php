@@ -47,8 +47,9 @@ class Fns
 
 
     /**
+     * Retirn Collection if check recognized, if check not recognized return false
      * @param $checkFile
-     * @return Collection
+     * @return Collection|bool
      * @throws \Exception
      */
     public function getAllCheItems($checkFile)
