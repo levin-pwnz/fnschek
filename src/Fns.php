@@ -35,7 +35,7 @@ class Fns
 
 
     /**
-     * Get positon in check, by chek photo
+     * Get info about a check,
      * @param $checkFile
      * @return Collection|null
      * @throws \Exception
@@ -51,7 +51,7 @@ class Fns
      * @return string
      * @throws \Exception
      */
-    public function index($checkFile)
+    public function getAllCheItems($checkFile)
     {
         return $this
             ->fnsService
