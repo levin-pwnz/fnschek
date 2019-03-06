@@ -40,7 +40,7 @@ class Fns
      * @return Collection|null
      * @throws \Exception
      */
-    public function getInfoByCheck($checkFile): Collection
+    public function getInfoByCheck($checkFile)
     {
         return collect($this->qrService->getCheck($checkFile));
     }
@@ -48,7 +48,7 @@ class Fns
 
     /**
      * @param $checkFile
-     * @return string
+     * @return Collection
      * @throws \Exception
      */
     public function getAllCheItems($checkFile)
