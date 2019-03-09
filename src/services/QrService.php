@@ -36,7 +36,7 @@ class QrService
     /**
      * Read QR code from check image file
      * @param $file
-     * @return void|bool
+     * @return bool|string
      * @throws \Exception
      */
     protected function readCodeFromFile($file)
@@ -60,6 +60,10 @@ class QrService
     {
         $recognizedText = $this->getRecognized();
 
+
+        if ( is_null($recognizedText)) {
+            return self::CHECK_NOT_RECOGNIZED;
+        }
         return FnsCheckHelper::fromQRCode($recognizedText);
     }
 

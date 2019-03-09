@@ -42,7 +42,6 @@ class FnsService
      */
     protected function getResponseFromFns($checkData)
     {
-
         $chek = $this->checkApi->checkExist($checkData, $this->auth());
 
         if ($chek == self::CHECK_DOES_NOT_EXIST) {
@@ -68,11 +67,9 @@ class FnsService
             return false;
         }
 
-        $items = json_decode($this->getResponseFromFns($checkData));
+        $checkItems = json_decode($this->getResponseFromFns($checkData));
 
-        $items = $items->document->receipt->items;
-
-        return collect($items);
+        return collect($checkItems->document->receipt->items);
 
     }
 
