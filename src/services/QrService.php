@@ -62,7 +62,7 @@ class QrService
 
 
         if ( is_null($recognizedText)) {
-            return self::CHECK_NOT_RECOGNIZED;
+            return null;
         }
         return FnsCheckHelper::fromQRCode($recognizedText);
     }
