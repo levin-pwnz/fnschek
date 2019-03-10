@@ -11,3 +11,26 @@
 `artisan vendor:publish`
 
 После открыть `fnsconfig.php` и указать логин и пароль для доступа к ФНС
+
+Как использовать?
+
+```
+use LevinPwnz\FnsCheck\Fns;
+
+class HomeController
+{
+    public function index(Fns $fns)
+    {
+        //Retrive all check items by check photo
+        $data = $fns->getAllCheckItems($checkFile);
+        
+        //Retrive info about a check
+        $checkInformation = $fns->getInfoByCheck($checkFile);
+
+        //Work with check items
+        foreach ($data as $item) {
+            print ($item->sum / 100);
+        }
+    }
+}
+```

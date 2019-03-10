@@ -4,7 +4,6 @@ namespace LevinPwnz\FnsCheck\Services;
 
 use FnsCheck\FnsCheckApi;
 use FnsCheck\FnsCheckAuth;
-use Illuminate\Support\Collection;
 
 /**
  * Class FnsService
@@ -12,6 +11,7 @@ use Illuminate\Support\Collection;
  */
 class FnsService
 {
+    const CHECK_DOES_NOT_EXIST = "406 Not Acceptable";
     /**
      * @var FnsCheckApi
      */
@@ -42,6 +42,12 @@ class FnsService
      */
     protected function getResponseFromFns($checkData)
     {
+        $chek = $this->checkApi->checkExist($checkData, $this->auth());
+
+        if ($chek == self::CHECK_DOES_NOT_EXIST) {
+            return false;
+        }
+
         $response = $this->checkApi->checkDetail($checkData, $this->auth())
             ->getContents();
 
@@ -56,15 +62,14 @@ class FnsService
      */
     public function getCheckItems($checkData)
     {
+        //If check not recognized
         if (!is_array($checkData)) {
             return false;
         }
 
-        $items = json_decode($this->getResponseFromFns($checkData));
+        $checkItems = json_decode($this->getResponseFromFns($checkData));
 
-        $items = $items->document->receipt->items;
-
-        return collect($items);
+        return collect($checkItems->document->receipt->items);
 
     }
 
