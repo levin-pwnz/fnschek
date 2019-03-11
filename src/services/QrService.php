@@ -19,20 +19,24 @@ class QrService
 
     /**
      * @param $checkFile
-     * @return array
+     * @return bool|array
      * @throws \Exception
      */
     public function getCheck( $checkFile )
     {
         $this->readCodeFromFile($checkFile);
 
-        return $this->makeCheckData($this->getRecognized());
+        if ( $this->recognized == null ) {
+            return self::CHECK_NOT_RECOGNIZED;
+        }
+
+        return $this->makeCheckData();
     }
 
     /**
      * Read QR code from check image file
      * @param $file
-     * @return void|bool
+     * @return bool
      * @throws \Exception
      */
     protected function readCodeFromFile( $file )
@@ -43,10 +47,9 @@ class QrService
 
         $recognized = ( new QrReader($file) )->text();
 
-        if ( $recognized == false ) return self::CHECK_NOT_RECOGNIZED;
+        if ( ! $recognized) return self::CHECK_NOT_RECOGNIZED;
 
-
-        $this->setRecognized($recognized);
+        $this->recognized = $recognized;
     }
 
     /**
@@ -54,14 +57,11 @@ class QrService
      */
     protected function makeCheckData()
     {
-        $recognizedText = $this->getRecognized();
-
-
-        if ( is_null($recognizedText) ) {
+        if ( is_null($this->recognized) ) {
             return null;
         }
 
-        return FnsCheckHelper::fromQRCode($recognizedText);
+        return FnsCheckHelper::fromQRCode($this->recognized);
     }
 
     /**
@@ -75,7 +75,7 @@ class QrService
     /**
      * @param mixed $recognized
      */
-    public function setRecognized( $recognized ): void
+    public function setRecognized( $recognized )
     {
         $this->recognized = $recognized;
     }
