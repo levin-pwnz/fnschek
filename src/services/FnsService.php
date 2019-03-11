@@ -64,7 +64,7 @@ class FnsService
     public function getCheckItems($checkData)
     {
         //If check not recognized
-        if (! is_array($checkData)) {
+        if (is_null($checkData)) {
             return false;
         }
 
