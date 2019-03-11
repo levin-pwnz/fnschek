@@ -27,7 +27,7 @@ class Fns
      * @param QrService $qrService
      * @param FnsService $fnsService
      */
-    public function __construct(QrService $qrService, FnsService $fnsService)
+    public function __construct( QrService $qrService, FnsService $fnsService )
     {
         $this->qrService = $qrService;
         $this->fnsService = $fnsService;
@@ -37,12 +37,16 @@ class Fns
     /**
      * Get info about a check,
      * @param $checkFile
-     * @return Collection|null
+     * @return Collection|bool
      * @throws \Exception
      */
-    public function getInfoByCheck($checkFile)
+    public function getInfoByCheck( $checkFile )
     {
-        return collect($this->qrService->getCheck($checkFile));
+        if ( $this->qrService->getCheck($checkFile) ) {
+            return collect($this->qrService->getCheck($checkFile));
+        }
+
+        return false;
     }
 
 
@@ -52,10 +56,8 @@ class Fns
      * @return Collection|bool
      * @throws \Exception
      */
-    public function getAllCheckItems($checkFile)
+    public function getAllCheckItems( $checkFile )
     {
-        return $this
-            ->fnsService
-            ->getCheckItems($this->qrService->getCheck($checkFile));
+        return $this->fnsService->getCheckItems($this->qrService->getCheck($checkFile));
     }
 }
