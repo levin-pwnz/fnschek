@@ -47,12 +47,12 @@ class Fns
 
 
     /**
-     * Retirn Collection if check recognized, if check not recognized return false
+     * Return Collection if check recognized, if check not recognized return false
      * @param $checkFile
      * @return Collection|bool
      * @throws \Exception
      */
-    public function getAllCheItems($checkFile)
+    public function getAllCheckItems($checkFile)
     {
         return $this
             ->fnsService

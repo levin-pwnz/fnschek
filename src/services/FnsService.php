@@ -44,6 +44,7 @@ class FnsService
     {
         $chek = $this->checkApi->checkExist($checkData, $this->auth());
 
+
         if ($chek == self::CHECK_DOES_NOT_EXIST) {
             return false;
         }
@@ -63,7 +64,7 @@ class FnsService
     public function getCheckItems($checkData)
     {
         //If check not recognized
-        if (!is_array($checkData)) {
+        if (! is_array($checkData)) {
             return false;
         }
 

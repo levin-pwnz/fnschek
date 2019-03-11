@@ -2,7 +2,7 @@
 
 namespace LevinPwnz\FnsCheck\Services;
 
-use phpDocumentor\Reflection\Types\Self_;
+use FnsCheck\FnsCheckHelper;
 use Zxing\QrReader;
 
 /**
@@ -18,19 +18,15 @@ class QrService
     private $recognized;
 
     /**
-     * @return mixed
+     * @param $checkFile
+     * @return array
+     * @throws \Exception
      */
-    public function getRecognized()
+    public function getCheck( $checkFile )
     {
-        return $this->recognized;
-    }
+        $this->readCodeFromFile($checkFile);
 
-    /**
-     * @param mixed $recognized
-     */
-    public function setRecognized($recognized): void
-    {
-        $this->recognized = $recognized;
+        return $this->makeCheckData($this->getRecognized());
     }
 
     /**
@@ -39,15 +35,15 @@ class QrService
      * @return void|bool
      * @throws \Exception
      */
-    protected function readCodeFromFile($file)
+    protected function readCodeFromFile( $file )
     {
-        if (is_null($file)) {
+        if ( is_null($file) ) {
             throw new \Exception('File must be a file');
         }
 
-        $recognized = (new QrReader($file))->text();
+        $recognized = ( new QrReader($file) )->text();
 
-        if ($recognized == false) return self::CHECK_NOT_RECOGNIZED;
+        if ( $recognized == false ) return self::CHECK_NOT_RECOGNIZED;
 
 
         $this->setRecognized($recognized);
@@ -60,41 +56,27 @@ class QrService
     {
         $recognizedText = $this->getRecognized();
 
-        if (!is_string($recognizedText)) {
-            return self::CHECK_NOT_RECOGNIZED;
+
+        if ( is_null($recognizedText) ) {
+            return null;
         }
 
-        $tmp = explode('&', $recognizedText);
-
-        $checkData = [
-            'fiscalNumber' => '', // "ФН" в чеке
-            'fiscalSign' => '', // "ФП" в чеке
-            'fiscalDocument' => '', // "ФД" в чеке
-        ];
-
-        foreach ($tmp as $item) {
-
-            $tmpIntem = explode('=', $item);
-
-            if ($tmpIntem[0] == 'fn') $checkData['fiscalNumber'] = $tmpIntem[1];
-            if ($tmpIntem[0] == 'fp') $checkData['fiscalSign'] = $tmpIntem[1];
-            if ($tmpIntem[0] == 'i') $checkData['fiscalDocument'] = $tmpIntem[1];
-
-        }
-
-        return $checkData;
+        return FnsCheckHelper::fromQRCode($recognizedText);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRecognized()
+    {
+        return $this->recognized;
+    }
 
     /**
-     * @param $checkFile
-     * @return array
-     * @throws \Exception
+     * @param mixed $recognized
      */
-    public function getCheck($checkFile)
+    public function setRecognized( $recognized ): void
     {
-        $this->readCodeFromFile($checkFile);
-
-        return $this->makeCheckData($this->getRecognized());
+        $this->recognized = $recognized;
     }
 }
