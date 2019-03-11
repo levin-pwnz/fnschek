@@ -42,7 +42,6 @@ class Fns
      */
     public function getInfoByCheck($checkFile)
     {
-        dd($this->qrService->getCheck($checkFile));
         return collect($this->qrService->getCheck($checkFile));
     }
 
