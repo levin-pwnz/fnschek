@@ -59,9 +59,11 @@ class QrService
             $this->recognized = $recognized->text;
         }
 
-        $this->recognized = $recognized;
+        if (!$recognized || isset($recognized->code) && $recognized->code == 400) {
+            $recognized = null;
+        }
 
-        return self::CHECK_NOT_RECOGNIZED;
+        $this->recognized = $recognized;
     }
 
     /**
