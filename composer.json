@@ -11,7 +11,6 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "robbiep/zbar-qrdecoder": "^2.0",
     "php-http/curl-client": "^1.7",
     "guzzlehttp/psr7": "^1.5",
     "php-http/message": "^1.7",
