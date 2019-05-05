@@ -2,11 +2,14 @@
 
 namespace LevinPwnz\FnsCheck\Services;
 
+use Exception;
 use FnsCheck\FnsCheckHelper;
+use RobbieP\ZbarQrdecoder\ZbarDecoder;
 use Zxing\QrReader;
 
 /**
  * Class QrService
+ *
  * @package LevinPwnz\FnsCheck\services
  */
 class QrService
@@ -20,13 +23,13 @@ class QrService
     /**
      * @param $checkFile
      * @return bool|array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function getCheck( $checkFile )
+    public function getCheck($checkFile)
     {
         $this->readCodeFromFile($checkFile);
 
-        if ( $this->recognized == null ) {
+        if ($this->recognized == null) {
             return self::CHECK_NOT_RECOGNIZED;
         }
 
@@ -35,29 +38,36 @@ class QrService
 
     /**
      * Read QR code from check image file
+     *
      * @param $file
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
-    protected function readCodeFromFile( $file )
+    protected function readCodeFromFile($file)
     {
-        if ( is_null($file) ) {
-            throw new \Exception('File must be a file');
+        if (is_null($file)) {
+            throw new Exception('File must be a file');
         }
 
-        $recognized = ( new QrReader($file) )->text();
+        $recognized = (new QrReader($file))->text();
 
-        if ( ! $recognized) return self::CHECK_NOT_RECOGNIZED;
+        if (!$recognized) {
+            $recognized = (new ZbarDecoder())->make($file);
+        }
+
+        if ($recognized->code != 200) {
+            return self::CHECK_NOT_RECOGNIZED;
+        }
 
         $this->recognized = $recognized;
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function makeCheckData()
     {
-        if ( is_null($this->recognized) ) {
+        if (is_null($this->recognized)) {
             return null;
         }
 
@@ -73,9 +83,9 @@ class QrService
     }
 
     /**
-     * @param mixed $recognized
+     * @param  mixed  $recognized
      */
-    public function setRecognized( $recognized )
+    public function setRecognized($recognized)
     {
         $this->recognized = $recognized;
     }
