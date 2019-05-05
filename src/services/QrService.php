@@ -52,11 +52,11 @@ class QrService
         $recognized = (new QrReader($file))->text();
 
         if (!$recognized) {
-            $recognized = (new ZbarDecoder())->make($file)->text;
+            $recognized = (new ZbarDecoder())->make($file);
         }
 
-        if ($recognized->code == 400) {
-            return self::CHECK_NOT_RECOGNIZED;
+        if ($recognized->code == 200) {
+            $this->recognized = $recognized->text;
         }
 
         $this->recognized = $recognized;
