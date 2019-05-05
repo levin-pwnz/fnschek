@@ -53,6 +53,7 @@ class QrService
 
         if (!$recognized) {
             $recognized = (new ZbarDecoder())->make($file);
+            print_r($recognized);
         }
 
         if (isset($recognized->code) && $recognized->code == 200) {
